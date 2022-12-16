@@ -8,7 +8,6 @@ class PageNotFound404:
 
 
 class Framework:
-
     """Base class for whole project framework."""
 
     def __init__(self, routes_obj):
@@ -16,10 +15,8 @@ class Framework:
 
     def __call__(self, environ: dict, start_response) -> list:
         path = environ['PATH_INFO']
-
-        if not path.endswith('/'):
+        if not path.endswith('/') and not '.' in path:
             path = f'{path}/'
-
         request = dict()
         method = environ['REQUEST_METHOD']
         request['method'] = method
@@ -31,7 +28,7 @@ class Framework:
         elif method == 'GET':
             request_params = GetRequest().get_request_params(environ)
             request['request_params'] = request_params
-            print(f'got GET: {request_params}')
+            print(f'got GET: {path}: {request_params}')
 
         if path in self.routes_lst:
             view = self.routes_lst[path]

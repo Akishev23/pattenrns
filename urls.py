@@ -1,4 +1,4 @@
-from views import Index, Contact, Page, Examples, AnotherPage
+from views import Index, Contact, Page, Examples, AnotherPage, Css
 
 routes = {
     '/': Index(),
@@ -6,4 +6,5 @@ routes = {
     '/page/': Page(),
     '/examples/': Examples(),
     '/another_page/': AnotherPage(),
+    '/style/': Css()
 }

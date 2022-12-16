@@ -1,81 +1,51 @@
-<!DOCTYPE HTML>
-<html>
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block style %}
+    {% include "inc/style.html" %}
+{% endblock %}
 
-<head>
-  <title>Обучающие материалы по Python</title>
-  <meta name="description" content="website description" />
-  <meta name="keywords" content="website keywords, website keywords" />
-  <meta http-equiv="content-type" content="text/html; charset=windows-1251" />
-  <link rel="stylesheet" type="text/css" href="style/style.css" title="style" />
-</head>
+{% block header %}
+    {% include "inc/header.html" %}
+{% endblock %}
 
-<body>
-  <div id="main">
-    <div id="header">
-      <div id="logo">
-        <div id="logo_text">
-          <!-- class="logo_colour", allows you to change the colour of the text -->
-          <h1><a href="index.html">textured<span class="logo_colour">_stars</span></a></h1>
-          <h2>Быстро. Просто. Доступно</h2>
-        </div>
-      </div>
-      <div id="menubar">
-        <ul id="menu">
-          <!-- put class="selected" in the li tag for the selected page - to highlight which page you're on -->
-          <li class="selected"><a href="index.html">Home</a></li>
-          <li><a href="examples.html">Примеры материалов</a></li>
-          <li><a href="page.html">Страница</a></li>
-          <li><a href="another_page.html">Еще одна</a></li>
-          <li><a href="contact.html">Контакты</a></li>
-        </ul>
-      </div>
-    </div>
-    <div id="site_content">
-      <div class="sidebar">
-        <!-- insert your sidebar items here -->
-        <h3>Последние новости</h3>
-        <h4>Запущен новый сайт</h4>
-        <h5>10 декабря, 2022</h5>
-        <p>2013 sees the redesign of our website. Take a look around and let us know what you think.<br /><a href="#">Read more</a></p>
-        <p></p>
-        <h4>New Website Launched</h4>
-        <h5>December 1st, 2013</h5>
-        <p>2013 sees the redesign of our website. Take a look around and let us know what you think.<br /><a href="#">Read more</a></p>
-        <h3>Полезные ссылки</h3>
+{% block sidebar %}
+    {% include "inc/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <h1>РџСЂРёРІРµС‚СЃС‚РІСѓСЋ РЅР° РіР»Р°РІРЅРѕР№ СЃС‚СЂР°РЅРёС†Рµ СЃР°Р№С‚Р°!</h1>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aspernatur culpa delectus
+            dolores error esse exercitationem, ipsam iure laborum nemo neque odio, pariatur
+            perferendis praesentium recusandae repellat repellendus, ullam! Asperiores commodi
+            consequatur cum delectus dolorem dolorum et, eveniet facere illo ipsam labore laudantium
+            molestias necessitatibus nesciunt non porro, provident quam qui quia quidem rem repellat
+            similique vitae. Aperiam culpa fugiat, natus praesentium sint velit? A asperiores aut
+            culpa cum deserunt distinctio exercitationem iste, iure labore maiores minus neque
+            nostrum obcaecati officiis perferendis perspiciatis quaerat quasi qui quidem saepe
+            similique sit veniam vitae. Beatae deleniti eius fugit natus possimus sed,
+            voluptates.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad animi aperiam consectetur
+            dignissimos, eius eligendi enim eos esse et eum facere fugit illo labore molestias
+            nesciunt numquam possimus quae quasi, quibusdam reprehenderit sunt tempora totam unde
+            veritatis. Adipisci amet assumenda consequatur cumque, dignissimos doloremque quis
+            suscipit. A animi, ut!</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque doloremque est,
+            illo magni obcaecati odit saepe temporibus tenetur totam!.</p>
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A architecto iure molestiae
+            molestias non perferendis quod ratione. Expedita, inventore modi nam nisi numquam
+            officiis quae, quam quo rem, unde vel..</p>
+        <h2>РЎРѕРІРјРµСЃС‚РёРјРѕСЃС‚СЊ СЃ Р±СЂР°СѓР·РµСЂР°РјРё</h2>
+        <p>Р­С‚РѕС‚ С€Р°Р±Р»РѕРЅ Р±С‹Р» РїСЂРѕС‚РµСЃС‚РёСЂРѕРІР°РЅ РґР»СЏ</p>
         <ul>
-          <li><a href="#">link 1</a></li>
-          <li><a href="#">link 2</a></li>
-          <li><a href="#">link 3</a></li>
-          <li><a href="#">link 4</a></li>
+            <li>Internet Explorer 8</li>
+            <li>Internet Explorer 7</li>
+            <li>FireFox 3.5</li>
+            <li>Google Chrome 6</li>
         </ul>
-        <h3>Поиск</h3>
-        <form method="post" action="#" id="search_form">
-          <p>
-            <input class="search" type="text" name="search_field" value="Enter keywords....." />
-            <input name="search" type="image" style="border: 0; margin: 0 0 -9px 5px;" src="style/search.png" alt="Search" title="Search" />
-          </p>
-        </form>
-      </div>
-      <div id="content">
-        <!-- insert the page content here -->
-        <h1>Приветствую на главной странице сайта!</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aspernatur culpa delectus dolores error esse exercitationem, ipsam iure laborum nemo neque odio, pariatur perferendis praesentium recusandae repellat repellendus, ullam! Asperiores commodi consequatur cum delectus dolorem dolorum et, eveniet facere illo ipsam labore laudantium molestias necessitatibus nesciunt non porro, provident quam qui quia quidem rem repellat similique vitae. Aperiam culpa fugiat, natus praesentium sint velit? A asperiores aut culpa cum deserunt distinctio exercitationem iste, iure labore maiores minus neque nostrum obcaecati officiis perferendis perspiciatis quaerat quasi qui quidem saepe similique sit veniam vitae. Beatae deleniti eius fugit natus possimus sed, voluptates.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad animi aperiam consectetur dignissimos, eius eligendi enim eos esse et eum facere fugit illo labore molestias nesciunt numquam possimus quae quasi, quibusdam reprehenderit sunt tempora totam unde veritatis. Adipisci amet assumenda consequatur cumque, dignissimos doloremque quis suscipit. A animi, ut!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque doloremque est, illo magni obcaecati odit saepe temporibus tenetur totam!.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A architecto iure molestiae molestias non perferendis quod ratione. Expedita, inventore modi nam nisi numquam officiis quae, quam quo rem, unde vel..</p>
-        <h2>Совместимость с браузерами</h2>
-        <p>Этот шаблон был протестирован для</p>
-        <ul>
-          <li>Internet Explorer 8</li>
-          <li>Internet Explorer 7</li>
-          <li>FireFox 3.5</li>
-          <li>Google Chrome 6</li>
-        </ul>
-      </div>
     </div>
-    <div id="footer">
-      Copyright &copy; textured_stars | <a href="http://validator.w3.org/check?uri=referer">HTML5</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.html5webtemplates.co.uk">Simple web templates by HTML5</a>
-    </div>
-  </div>
-</body>
-</html>
+{% endblock %}
+
+{% block footer %}
+    {% include "inc/footer.html" %}
+{% endblock %}
