@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block style %}
+    {% include "inc/style.html" %}
+{% endblock %}
+
+{% block header %}
+    {% include "inc/header.html" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "inc/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+   {%  include 'inc/inc-index.html' %}
+{% endblock %}
+{% block footer %}
+    {% include "inc/footer.html" %}
+{% endblock %}

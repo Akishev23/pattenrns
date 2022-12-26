@@ -1,5 +1,5 @@
 """
-Module for different type of request handling
+Module for different type of request with params handling
 """
 
 

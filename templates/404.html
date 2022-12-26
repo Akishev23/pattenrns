@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block style %}
+    {% include "inc/style.html" %}
+{% endblock %}
+
+{% block header %}
+    {% include "inc/header.html" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "inc/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+    <div id="main">
+        <div class="fof">
+            <h1>Error 404</h1>
+            <h3>Страница не найдена</h3>
+            <a href="/">Вернуться</a>
+        </div>
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% include "inc/footer.html" %}
+{% endblock %}
+

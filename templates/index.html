@@ -14,35 +14,21 @@
 
 {% block content %}
     <div id="content">
-        <h1>Приветствую на главной странице сайта!</h1>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad aspernatur culpa delectus
-            dolores error esse exercitationem, ipsam iure laborum nemo neque odio, pariatur
-            perferendis praesentium recusandae repellat repellendus, ullam! Asperiores commodi
-            consequatur cum delectus dolorem dolorum et, eveniet facere illo ipsam labore laudantium
-            molestias necessitatibus nesciunt non porro, provident quam qui quia quidem rem repellat
-            similique vitae. Aperiam culpa fugiat, natus praesentium sint velit? A asperiores aut
-            culpa cum deserunt distinctio exercitationem iste, iure labore maiores minus neque
-            nostrum obcaecati officiis perferendis perspiciatis quaerat quasi qui quidem saepe
-            similique sit veniam vitae. Beatae deleniti eius fugit natus possimus sed,
-            voluptates.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab ad animi aperiam consectetur
-            dignissimos, eius eligendi enim eos esse et eum facere fugit illo labore molestias
-            nesciunt numquam possimus quae quasi, quibusdam reprehenderit sunt tempora totam unde
-            veritatis. Adipisci amet assumenda consequatur cumque, dignissimos doloremque quis
-            suscipit. A animi, ut!</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam cumque doloremque est,
-            illo magni obcaecati odit saepe temporibus tenetur totam!.</p>
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. A architecto iure molestiae
-            molestias non perferendis quod ratione. Expedita, inventore modi nam nisi numquam
-            officiis quae, quam quo rem, unde vel..</p>
-        <h2>Совместимость с браузерами</h2>
-        <p>Этот шаблон был протестирован для</p>
-        <ul>
-            <li>Internet Explorer 8</li>
-            <li>Internet Explorer 7</li>
-            <li>FireFox 3.5</li>
-            <li>Google Chrome 6</li>
-        </ul>
+        <h4>На данной странице сайта вы можете добавить категорию курса или просмотреть
+            существующие</h4>
+        <div>
+            <h3>Список существующих категорий</h3>
+            {% for item in objects %}
+                <li>
+                    {{ item.name }} Количество курсов: {{ item.course_count() }}
+                    <a href="/course-list/?id={{item.id}}">Показать все курсы категории</a>
+                </li>
+            {% endfor %}
+        </div>
+        <div>
+            <a href="/create-category/"><h3>Создать новую категорию</h3></a>
+        </div>
+
     </div>
 {% endblock %}
 
