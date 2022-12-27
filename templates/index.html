@@ -20,8 +20,9 @@
             <h3>Список существующих категорий</h3>
             {% for item in objects %}
                 <li>
-                    {{ item.name }} Количество курсов: {{ item.course_count() }}
-                    <a href="/course-list/?id={{item.id}}">Показать все курсы категории</a>
+                    {% set cat =  item.name %}
+                    {{ cat }} Количество курсов: {{ count[item] }}
+                    <a href="/course-list/">Показать все доступные курсы</a>
                 </li>
             {% endfor %}
         </div>

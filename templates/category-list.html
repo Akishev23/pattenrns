@@ -14,22 +14,23 @@
 
 {% block content %}
     <div class="content">
-    <a href="/">назад</a>
+        <a href="/">назад</a>
 
-    <h1>Список категорий</h1>
-    <ul>
+        <h1>Список категорий</h1>
+        <ul>
 
-        {% for item in objects %}
-        <li>
-            {{item.name}} <span>Количество курсов: {{item.course_count()}}</span>
-        </li>
-        {% endfor %}
-    </ul>
+            {% for item in objects %}
+                {% set cat =  item.name %}
+                <li>
+                    {{ cat }} <span>Количество курсов: {{ counts[item] }}</span>
+                </li>
+            {% endfor %}
+        </ul>
 
-	<div>
-		<li><a href="/courses-list/">Список курсов</a></li>
-		<li><a href="/create-course/">Создать курс</a></li>
-	</div>
+        <div>
+            <li><a href="/course-list/">Список курсов</a></li>
+            <li><a href="/create-course/">Создать курс</a></li>
+        </div>
     </div>
 {% endblock %}
 {% block footer %}

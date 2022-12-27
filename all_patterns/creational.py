@@ -96,18 +96,10 @@ class CourseFactory:
 class Category:
     auto_id = 0
 
-    def __init__(self, name, category):
+    def __init__(self, name):
         self.id = Category.auto_id
         Category.auto_id += 1
         self.name = name
-        self.category = category
-        self.courses = []
-
-    def course_count(self):
-        quantity_of_courses = len(self.courses)
-        if self.category:
-            quantity_of_courses += self.category.course_count()
-        return quantity_of_courses
 
 
 class Engine:
@@ -117,15 +109,20 @@ class Engine:
         self.students = []
         self.courses = []
         self.categories = []
+        self.cat_count = {}
 
-    @staticmethod
-    def create_user(kind):
+    def create_user(self, kind):
         usr = UserMachine()
+        if kind == 'tutor':
+            self.tutors.append(usr)
+        else:
+            self.students.append(usr)
         return usr.create_user(kind)
 
-    @staticmethod
-    def create_category(name, category=None):
-        cat = Category(name, category)
+    def create_category(self, name):
+        cat = Category(name)
+        self.categories.append(cat)
+        self.cat_count[cat] = 0
         return cat
 
     def find_category_by_id(self, given_id):
@@ -134,15 +131,25 @@ class Engine:
                 return item
         raise Exception(f'there is no category with given id {given_id}')
 
-    @staticmethod
-    def create_course(kind, name, category):
-        return CourseFactory.create_course(kind, name, category)
+    def create_course(self, kind, name, category):
+        course = CourseFactory.create_course(kind, name, category)
+        self.courses.append(course)
+        if not self.categories.count(category):
+            self.categories.append(category)
+        try:
+            self.cat_count[category] += 1
+        except KeyError:
+            self.cat_count[category] = 1
+        return course
 
     def get_course(self, name):
         for course in self.courses:
             if course.name == name:
                 return course
         raise Exception(f'there is no course with name {name}')
+
+    def course_count(self, cat_name):
+        return self.cat_count[cat_name]
 
     @staticmethod
     def decode_value(val):

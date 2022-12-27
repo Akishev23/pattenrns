@@ -12,7 +12,8 @@ class Index:
     def __call__(self, request, *args, **kwargs):
         return '200 OK', render('index.html',
                                 title='Главная страница',
-                                objects=site.categories
+                                objects=site.categories,
+                                count=site.cat_count
                                 ), 'text/html'
 
 
@@ -34,26 +35,20 @@ class NotFound404:
 class CourseList:
     def __call__(self, request):
         logger.log('COURSE LIST ASKED')
-
-        cat = request.get('request_params').get('given_id')
-        if cat:
-            cat = int(cat)
-            category = site.find_category_by_id(cat)
-            return '200 OK', render('course-list.html',
-                                    title='Список курсов',
-                                    objects=category.courses,
-                                    name=category.name,
-                                    given_id=category.id
-                                    ), 'text/html'
-        return '200 OK', 'No courses have been found', 'text/html'
+        return '200 OK', render('course-list.html',
+                                title='Список курсов',
+                                objects=site.courses,
+                                ), 'text/html'
 
 
 class CategoryList:
-    def __call__(self):
+    def __call__(self, request):
         logger.log('List of categories asked')
         return '200 OK', render('category-list.html',
                                 title='Список категорий',
-                                objects=site.categories), 'text/html'
+                                objects=site.categories,
+                                counts=site.cat_count
+                                ), 'text/html'
 
 
 class CreateCourse:
@@ -63,33 +58,29 @@ class CreateCourse:
         if request['method'] == 'POST':
             data = request['data']
 
-            name = data['name']
+            name = data.get('name')
             name = site.decode_value(name)
-
+            try:
+                cat_id = int(data.get('cat'))
+            except TypeError:
+                pass
+            else:
+                self.category_id = cat_id
+            course_kind = data.get('kind')
             category = None
             if self.category_id != -1:
                 category = site.find_category_by_id(int(self.category_id))
+                site.create_course(course_kind, name, category)
 
-                course = site.create_course('recorded', name, category)
-                site.courses.append(course)
-
-            return '200 OK', render('course_list.html',
-                                    objects_list=category.courses,
-                                    name=category.name,
-                                    id=category.id,
-                                    title='Список курсов'), 'text/html'
+            return '200 OK', render('course-list.html',
+                                    objects=site.courses,
+                                    title='Список доступных курсов'), 'text/html'
 
         else:
-            self.category_id = int(request.get('request_params').get('id'))
-            if self.category_id and self.category_id != -1:
-                category = site.find_category_by_id(int(self.category_id))
 
-                return '200 OK', render('create_course.html',
-                                        name=category.name,
-                                        id=category.id,
+            return '200 OK', render('create-course-without-category.html',
+                                        names=site.categories,
                                         title='Создать курс'), 'text/html'
-
-            return '200 OK', 'No categories have been found', 'text/html'
 
 
 class CreateCategory:
@@ -101,18 +92,11 @@ class CreateCategory:
             name = data['name']
             name = site.decode_value(name)
 
-            category_id = data.get('category_id')
-
-            category = None
-            if category_id:
-                category = site.find_category_by_id(int(category_id))
-
-            new_category = site.create_category(name, category)
-
-            site.categories.append(new_category)
+            site.create_category(name)
 
             return '200 OK', render('index.html',
-                                    objects_list=site.categories,
+                                    objects=site.categories,
+                                    count=site.cat_count,
                                     title='Главная страница'), 'text/html'
         else:
             categories = site.categories
@@ -135,11 +119,10 @@ class CopyCourse:
                 new_course = site.create_course(old_course_kind, new_name,
                                                 old_course.category)
                 new_course.name = new_name
-                site.courses.append(new_course)
 
-            return '200 OK', render('course_list.html',
-                                    objects_list=site.courses,
-                                    name=new_course.category.name), 'text/html'
+            return '200 OK', render('course-list.html',
+                                    objects=site.courses,
+                                    title='Список доступных курсов'), 'text/html'
         except KeyError:
             return '200 OK', 'No courses have been found', 'text/html'
 
