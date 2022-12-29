@@ -3,12 +3,17 @@ from datetime import date
 
 from own_framework.templator import render
 from all_patterns.creational import Engine, Logger
+from all_patterns.structural import Router, Debug
 
 site = Engine()
 logger = Logger('common')
 
+routs = {}
 
+
+@Router(routs, '/')
 class Index:
+    @Debug()
     def __call__(self, request, *args, **kwargs):
         return '200 OK', render('index.html',
                                 title='Главная страница',
@@ -17,7 +22,9 @@ class Index:
                                 ), 'text/html'
 
 
+@Router(routs)
 class StudyPrograms:
+    @Debug()
     def __call__(self, request, *args, **kwargs):
         return '200 OK', render('study-programs.html',
                                 title='Учебные программы',
@@ -26,13 +33,16 @@ class StudyPrograms:
 
 
 class NotFound404:
+    @Debug()
     def __call__(self, request):
         return '404 Not Found', render('404.html',
                                        title='Страница не найдена'
                                        ), 'text/html'
 
 
+@Router(routs)
 class CourseList:
+    @Debug()
     def __call__(self, request):
         logger.log('COURSE LIST ASKED')
         return '200 OK', render('course-list.html',
@@ -41,7 +51,9 @@ class CourseList:
                                 ), 'text/html'
 
 
+@Router(routs)
 class CategoryList:
+    @Debug()
     def __call__(self, request):
         logger.log('List of categories asked')
         return '200 OK', render('category-list.html',
@@ -51,9 +63,11 @@ class CategoryList:
                                 ), 'text/html'
 
 
+@Router(routs)
 class CreateCourse:
     category_id = -1
 
+    @Debug()
     def __call__(self, request):
         if request['method'] == 'POST':
             data = request['data']
@@ -79,11 +93,13 @@ class CreateCourse:
         else:
 
             return '200 OK', render('create-course-without-category.html',
-                                        names=site.categories,
-                                        title='Создать курс'), 'text/html'
+                                    names=site.categories,
+                                    title='Создать курс'), 'text/html'
 
 
+@Router(routs)
 class CreateCategory:
+    @Debug()
     def __call__(self, request):
 
         if request['method'] == 'POST':
@@ -105,7 +121,9 @@ class CreateCategory:
                                     title='Создать категорию'), 'text/html'
 
 
+@Router(routs)
 class CopyCourse:
+    @Debug()
     def __call__(self, request):
         request_params = request['request_params']
 
@@ -127,6 +145,7 @@ class CopyCourse:
             return '200 OK', 'No courses have been found', 'text/html'
 
 
+@Router(routs)
 class Css:
     def __call__(self, request):
         return '200 OK', render('/style/style.css'), 'text/css'

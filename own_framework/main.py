@@ -1,6 +1,5 @@
 import quopri
 from own_framework.own_requests import GetRequest, PostRequest
-from own_framework.templator import render
 
 
 class PageNotFound404:
@@ -26,14 +25,14 @@ class Framework:
         if method == 'POST':
             data = PostRequest().get_request_params(environ)
             request['data'] = Framework.decode_value(data)
-            print(f'got POST: {Framework.decode_value(data)}')
+            print(f'GOT POST: {Framework.decode_value(data)}')
         elif method == 'GET':
             request_params = GetRequest().get_request_params(environ)
             if request_params:
                 request['request_params'] = Framework.decode_value(request_params)
-                print(f'got GET: {path}: {Framework.decode_value(request_params)}')
+                print(f'GOT GET: {path}: {Framework.decode_value(request_params)}')
             else:
-                print(f'got GET: {path}')
+                print(f'GOT GET: {path}')
 
         if path in self.routes_lst:
             view = self.routes_lst[path]
@@ -55,3 +54,26 @@ class Framework:
             val_decode_str = quopri.decodestring(val).decode('CP1251')
             new_data[k] = val_decode_str
         return new_data
+
+
+class DebugApplication(Framework):
+
+    def __init__(self, routes_obj, fronts_obj):
+        self.application = Framework(routes_obj, fronts_obj)
+        super().__init__(routes_obj, fronts_obj)
+
+    def __call__(self, env, start_response):
+        print('DEBUG MODE')
+        print(env)
+        return self.application(env, start_response)
+
+
+class FakeApplication(Framework):
+
+    def __init__(self, routes_obj, fronts_obj):
+        self.application = Framework(routes_obj, fronts_obj)
+        super().__init__(routes_obj, fronts_obj)
+
+    def __call__(self, env, start_response):
+        start_response('200 OK', [('Content-Type', 'text/html')])
+        return [b'Hello from Fake']
