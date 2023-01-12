@@ -4,9 +4,12 @@ from datetime import date
 from own_framework.templator import render
 from all_patterns.creational import Engine, Logger
 from all_patterns.structural import Router, Debug
+from all_patterns.behavioral import EmailNotifier, SmsNotifier, ListView, CreateView, BaseSerializer
 
 site = Engine()
 logger = Logger('common')
+email_notifier = EmailNotifier()
+sms_notifier = SmsNotifier()
 
 routs = {}
 
@@ -81,10 +84,12 @@ class CreateCourse:
             else:
                 self.category_id = cat_id
             course_kind = data.get('kind')
-            category = None
             if self.category_id != -1:
                 category = site.find_category_by_id(int(self.category_id))
-                site.create_course(course_kind, name, category)
+                course = site.create_course(course_kind, name, category)
+
+                course.observers.append(email_notifier)
+                course.observers.append(sms_notifier)
 
             return '200 OK', render('course-list.html',
                                     objects=site.courses,
@@ -108,7 +113,8 @@ class CreateCategory:
             name = data['name']
             name = site.decode_value(name)
 
-            site.create_category(name)
+            nc = site.create_category(name)
+            site.categories.append(nc)
 
             return '200 OK', render('index.html',
                                     objects=site.categories,
@@ -149,3 +155,47 @@ class CopyCourse:
 class Css:
     def __call__(self, request):
         return '200 OK', render('/style/style.css'), 'text/css'
+
+
+@AppRoute(routes=routes, url='/student-list/')
+class StudentListView(ListView):
+    queryset = site.students
+    template_name = 'student_list.html'
+
+
+@AppRoute(routes=routes, url='/create-student/')
+class StudentCreateView(CreateView):
+    template_name = 'create_student.html'
+
+    def create_obj(self, data: dict):
+        name = data['name']
+        name = site.decode_value(name)
+        new_obj = site.create_user('student', name)
+        site.students.append(new_obj)
+
+
+@AppRoute(routes=routes, url='/add-student/')
+class AddStudentByCourseCreateView(CreateView):
+    template_name = 'add_student.html'
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context['courses'] = site.courses
+        context['students'] = site.students
+        return context
+
+    def create_obj(self, data: dict):
+        course_name = data['course_name']
+        course_name = site.decode_value(course_name)
+        course = site.get_course(course_name)
+        student_name = data['student_name']
+        student_name = site.decode_value(student_name)
+        student = site.get_student(student_name)
+        course.add_student(student)
+
+
+@AppRoute(routes=routes, url='/api/')
+class CourseApi:
+    @Debug()
+    def __call__(self, request):
+        return '200 OK', BaseSerializer(site.courses).save()

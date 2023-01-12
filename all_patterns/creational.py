@@ -2,9 +2,12 @@ from copy import deepcopy
 from quopri import decodestring
 import enum
 
+from behavioral import PropertyObservable, Subject
+
 
 class User:
-    pass
+    def __init__(self, name):
+        self.name = name
 
 
 class Tutor(User):
@@ -12,23 +15,29 @@ class Tutor(User):
 
 
 class Student(User):
-    pass
+    def __init__(self, name):
+        self.courses = []
+        super().__init__(name)
 
 
 class UserFactory:
     pass
 
 
-class StudentFactory(UserFactory):
-    @staticmethod
-    def create():
-        return Student()
+class StudentFactory(UserFactory, PropertyObservable):
+
+    def __init__(self):
+        super().__init__()
+
+    def create(self, name):
+        if name:
+            return Student(name)
 
 
 class TutorFactory(UserFactory):
     @staticmethod
-    def create():
-        return Tutor()
+    def create(name):
+        return Tutor(name)
 
 
 class UserMachine:
@@ -49,16 +58,26 @@ class UserMachine:
             self.factories.append((user_def, factory_instance))
 
     @staticmethod
-    def create_user(kind):
+    def create_user(kind, name):
         factory = [i[1] for i in UserMachine.factories if kind.capitalize() == i[0]][0]
-        return factory.create()
+        return factory.create(name)
 
 
-class Course:
+class Course(Subject):
 
     def __init__(self, name, category):
         self.name = name
         self.category = category
+        self.students = []
+        super().__init__()
+
+    def __getitem__(self, item):
+        return self.students[item]
+
+    def add_student(self, student):
+        self.students.append(student)
+        student.courses.append(self)
+        self.notify()
 
 
 class InteractiveCourse(Course):
@@ -96,10 +115,18 @@ class CourseFactory:
 class Category:
     auto_id = 0
 
-    def __init__(self, name):
+    def __init__(self, name, category):
         self.id = Category.auto_id
         Category.auto_id += 1
         self.name = name
+        self.category = category
+        self.courses = []
+
+    def course_count(self):
+        result = len(self.courses)
+        if self.category:
+            result += self.category.course_count()
+        return result
 
 
 class Engine:
@@ -111,16 +138,16 @@ class Engine:
         self.categories = []
         self.cat_count = {}
 
-    def create_user(self, kind):
+    def create_user(self, kind, name):
         usr = UserMachine()
         if kind == 'tutor':
             self.tutors.append(usr)
         else:
             self.students.append(usr)
-        return usr.create_user(kind)
+        return usr.create_user(kind, name)
 
-    def create_category(self, name):
-        cat = Category(name)
+    def create_category(self, name, category=None):
+        cat = Category(name, category)
         self.categories.append(cat)
         self.cat_count[cat] = 0
         return cat
