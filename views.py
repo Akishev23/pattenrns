@@ -5,11 +5,14 @@ from own_framework.templator import render
 from all_patterns.creational import Engine, Logger
 from all_patterns.structural import Router, Debug
 from all_patterns.behavioral import EmailNotifier, SmsNotifier, ListView, CreateView, BaseSerializer
+from architectural_system_pattern_unit_of_work import UnitOfWork
 
 site = Engine()
 logger = Logger('common')
 email_notifier = EmailNotifier()
 sms_notifier = SmsNotifier()
+UnitOfWork.new_current()
+UnitOfWork.get_current().set_mapper_registry(MapperRegistry)
 
 routs = {}
 
@@ -159,8 +162,11 @@ class Css:
 
 @AppRoute(routes=routes, url='/student-list/')
 class StudentListView(ListView):
-    queryset = site.students
     template_name = 'student_list.html'
+
+    def get_queryset(self):
+        mapper = MapperRegistry.get_current_mapper('student')
+        return mapper.all()
 
 
 @AppRoute(routes=routes, url='/create-student/')
@@ -172,6 +178,8 @@ class StudentCreateView(CreateView):
         name = site.decode_value(name)
         new_obj = site.create_user('student', name)
         site.students.append(new_obj)
+        new_obj.mark_new()
+        UnitOfWork.get_current().commit()
 
 
 @AppRoute(routes=routes, url='/add-student/')
