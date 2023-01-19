@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block style %}
+    {% include "inc/style.html" %}
+{% endblock %}
+
+{% block header %}
+    {% include "inc/header.html" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "inc/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+    <div>
+        <li>
+            <a href="/student-list/">Список студентов</a>
+        </li>
+    </div>
+    <div>
+        <h1>Создание студента</h1>
+        <form method="post">
+            <input type="text" name="name" placeholder="Имя">
+            <button type="submit">Сохранить</button>
+        </form>
+    </div>
+{% endblock %}
+{% block footer %}
+    {% include "inc/footer.html" %}
+{% endblock %}

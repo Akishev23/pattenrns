@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block style %}
+    {% include "inc/style.html" %}
+{% endblock %}
+
+{% block header %}
+    {% include "inc/header.html" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "inc/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+    <div class="content">
+        <div>
+            <a href="/">назад на главную</a>
+        </div>
+
+        <br>
+        <br>
+
+        <div>
+            <a href="/create-course/">Создать новый курс</a>
+            <br>
+            <h1>Список доступных курсов</h1>
+            <table>
+                <tr>
+                    <th>Название курса</th>
+                    <th>Категория курса</th>
+                    <th></th>
+                </tr>
+                {% for item in objects %}
+                    <tr>
+                        <th>{{ item.name }} </th>
+                        <th>{{ item.category.name }} </th>
+                        <th>
+                    <span><a
+                            href="/copy-course/?name={{ item.name }}">Скопировать</a></span></th>
+                    </tr>
+                {% endfor %}
+            </table>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {% include "inc/footer.html" %}
+{% endblock %}

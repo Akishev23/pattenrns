@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %} {{ title }} {% endblock %}
+{% block style %}
+    {% include "inc/style.html" %}
+{% endblock %}
+
+{% block header %}
+    {% include "inc/header.html" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "inc/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <div>
+            <a href="/courses-list/">К списку курсов</a>
+        </div>
+
+        <br>
+        <br>
+
+        <div>
+            <h1>Создание курса для любой категории"</h1>
+            <form action="" method="post">
+                <fieldset>
+                    <legend>Создаем курс</legend>
+                    <p><label class="title" for="name">Название курса</label>
+                        <input type="text" name="name" id="name"><br>
+                    <p><label for="category" class="title">Выбираем категорию</label>
+                        <select name="cat" id="cat">
+                            {% for cat in names %}
+                                <option value="{{ cat.id }}">{{ cat.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </p>
+                    <p><label for="kind" class="title">Выбираем тип курса</label>
+                        <select name="kind" id="kind">
+                            <option value="recorded">Курс в записи</option>
+                            <option value="interactive">Интерактивный</option>
+                        </select>
+                    </p>
+                </fieldset>
+                <div class="submit"><input type="submit" value="Создать"/></div>
+            </form>
+        </div>
+    </div>
+{% endblock %}
+{% block footer %}
+    {% include "inc/footer.html" %}
+{% endblock %}

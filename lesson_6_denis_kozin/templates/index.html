@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ title }}{% endblock %}
+{% block style %}
+    {% include "inc/style.html" %}
+{% endblock %}
+
+{% block header %}
+    {% include "inc/header.html" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "inc/sidebar.html" %}
+{% endblock %}
+
+{% block content %}
+    <div id="content">
+        <h4>На данной странице сайта вы можете добавить категорию курса или просмотреть
+            существующие</h4>
+        <div>
+            <h3>Список существующих категорий</h3>
+            {% for item in objects %}
+                <li>
+                    {% set cat =  item.name %}
+                    {{ cat }} Количество курсов: {{ count[item] }}
+                    <a href="/course-list/">Показать все доступные курсы</a>
+                </li>
+            {% endfor %}
+        </div>
+        <div>
+            <a href="/create-category/"><h3>Создать новую категорию</h3></a>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block footer %}
+    {% include "inc/footer.html" %}
+{% endblock %}
